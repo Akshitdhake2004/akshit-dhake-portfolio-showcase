@@ -1,9 +1,10 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./ThemeToggle";
+import { cn } from "@/lib/utils";
 
 const navItems = [
   { name: "Home", href: "#home" },
@@ -18,6 +19,8 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const [indicatorStyle, setIndicatorStyle] = useState({});
+  const navRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -54,10 +57,42 @@ export default function Navbar() {
     };
   }, [scrolled, activeSection]);
 
+  // Update indicator position when active section changes
+  useEffect(() => {
+    const updateIndicator = () => {
+      if (navRef.current) {
+        const activeNavItem = navRef.current.querySelector(`a[href="#${activeSection}"]`);
+        if (activeNavItem) {
+          const rect = activeNavItem.getBoundingClientRect();
+          const navRect = navRef.current.getBoundingClientRect();
+          
+          setIndicatorStyle({
+            left: rect.left - navRect.left,
+            width: rect.width,
+            transform: 'translateX(0)',
+            transition: 'all 0.3s ease'
+          });
+        }
+      }
+    };
+    
+    updateIndicator();
+    // Add resize event listener to update indicator on window resize
+    window.addEventListener('resize', updateIndicator);
+    return () => {
+      window.removeEventListener('resize', updateIndicator);
+    };
+  }, [activeSection]);
+
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-background/80 backdrop-blur-md shadow-sm" : "bg-transparent"}`}>
+    <header className={cn(
+      "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
+      scrolled 
+        ? "bg-background/80 backdrop-blur-md shadow-sm py-2" 
+        : "bg-transparent py-4"
+    )}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between">
           <div className="flex-shrink-0">
             <Link to="/" className="text-xl font-heading font-bold text-foreground shine-effect">
               Akshit<span className="text-primary">.</span>
@@ -65,18 +100,28 @@ export default function Navbar() {
           </div>
           
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center space-x-4">
+          <nav ref={navRef} className="hidden md:flex items-center space-x-4 relative">
+            {/* Nav Indicator - Animated underline */}
+            <span 
+              className="absolute bottom-0 h-0.5 bg-primary rounded-full transition-all duration-300"
+              style={indicatorStyle}
+            ></span>
+            
             {navItems.map((item) => (
               <a
                 key={item.name}
                 href={item.href}
-                className={`px-3 py-2 text-sm font-medium transition-colors animated-border ${
+                className={cn(
+                  "px-3 py-2 text-sm font-medium transition-colors relative",
                   activeSection === item.href.substring(1)
                     ? "text-primary"
                     : "text-foreground/80 hover:text-primary"
-                }`}
+                )}
               >
                 {item.name}
+                {activeSection === item.href.substring(1) && (
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full"></span>
+                )}
               </a>
             ))}
             <ThemeToggle />
@@ -103,26 +148,31 @@ export default function Navbar() {
       </div>
       
       {/* Mobile Nav Menu */}
-      {isOpen && (
-        <div className="md:hidden animate-fade-in">
-          <div className="px-2 pt-2 pb-3 space-y-1 bg-background/95 backdrop-blur-md shadow-lg gradient-card">
-            {navItems.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                  activeSection === item.href.substring(1)
-                    ? "text-primary bg-secondary/50"
-                    : "text-foreground hover:bg-secondary hover:text-primary"
-                }`}
-                onClick={() => setIsOpen(false)}
-              >
-                {item.name}
-              </a>
-            ))}
-          </div>
+      <div 
+        className={cn(
+          "md:hidden fixed inset-x-0 top-16 transition-all duration-300 transform",
+          isOpen ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0 pointer-events-none"
+        )}
+      >
+        <div className="px-2 pt-2 pb-3 space-y-1 bg-background/95 backdrop-blur-md shadow-lg gradient-card">
+          {navItems.map((item, index) => (
+            <a
+              key={item.name}
+              href={item.href}
+              className={cn(
+                "block px-3 py-2 rounded-md text-base font-medium transition-all",
+                activeSection === item.href.substring(1)
+                  ? "text-primary bg-secondary/50 translate-x-2"
+                  : "text-foreground hover:bg-secondary hover:text-primary"
+              )}
+              onClick={() => setIsOpen(false)}
+              style={{ transitionDelay: `${index * 0.05}s` }}
+            >
+              {item.name}
+            </a>
+          ))}
         </div>
-      )}
+      </div>
     </header>
   );
 }
