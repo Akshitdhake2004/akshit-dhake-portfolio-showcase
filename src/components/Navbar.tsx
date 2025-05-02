@@ -17,6 +17,7 @@ const navItems = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,20 +25,35 @@ export default function Navbar() {
       if (isScrolled !== scrolled) {
         setScrolled(isScrolled);
       }
+      
+      // Determine active section based on scroll position
+      const sections = navItems.map(item => item.href.substring(1));
+      const currentSection = sections.findLast(section => {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          return rect.top <= 100;
+        }
+        return false;
+      }) || "home";
+      
+      if (currentSection !== activeSection) {
+        setActiveSection(currentSection);
+      }
     };
 
     document.addEventListener("scroll", handleScroll);
     return () => {
       document.removeEventListener("scroll", handleScroll);
     };
-  }, [scrolled]);
+  }, [scrolled, activeSection]);
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-background/80 backdrop-blur-md shadow-sm" : "bg-transparent"}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
-            <Link to="/" className="text-xl font-heading font-bold text-foreground">
+            <Link to="/" className="text-xl font-heading font-bold text-foreground shine-effect">
               Akshit<span className="text-primary">.</span>
             </Link>
           </div>
@@ -48,7 +64,11 @@ export default function Navbar() {
               <a
                 key={item.name}
                 href={item.href}
-                className="px-3 py-2 text-sm font-medium text-foreground/80 hover:text-primary transition-colors"
+                className={`px-3 py-2 text-sm font-medium transition-colors animated-border ${
+                  activeSection === item.href.substring(1)
+                    ? "text-primary"
+                    : "text-foreground/80 hover:text-primary"
+                }`}
               >
                 {item.name}
               </a>
@@ -64,6 +84,7 @@ export default function Navbar() {
               size="icon"
               onClick={() => setIsOpen(!isOpen)}
               aria-label="Toggle menu"
+              className="animation-pulse"
             >
               {isOpen ? (
                 <X className="h-6 w-6" />
@@ -78,12 +99,16 @@ export default function Navbar() {
       {/* Mobile Nav Menu */}
       {isOpen && (
         <div className="md:hidden animate-fade-in">
-          <div className="px-2 pt-2 pb-3 space-y-1 bg-background/95 backdrop-blur-md shadow-lg">
+          <div className="px-2 pt-2 pb-3 space-y-1 bg-background/95 backdrop-blur-md shadow-lg gradient-card">
             {navItems.map((item) => (
               <a
                 key={item.name}
                 href={item.href}
-                className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-secondary hover:text-primary transition-colors"
+                className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                  activeSection === item.href.substring(1)
+                    ? "text-primary bg-secondary/50"
+                    : "text-foreground hover:bg-secondary hover:text-primary"
+                }`}
                 onClick={() => setIsOpen(false)}
               >
                 {item.name}

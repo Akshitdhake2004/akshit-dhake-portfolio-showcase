@@ -31,28 +31,35 @@ export default function ProjectsSection() {
   return (
     <section id="projects" className="bg-secondary/50">
       <div className="section-container">
-        <h2 className="section-title">Projects</h2>
+        <h2 className="section-title">
+          <span className="gradient-text">Projects</span>
+        </h2>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {projects.map((project, index) => (
             <div 
               key={project.title}
-              className="bg-card rounded-lg overflow-hidden shadow-md card-hover animate-fade-in"
-              style={{ animationDelay: `${index * 0.15}s` }}
+              className="bg-card rounded-lg overflow-hidden shadow-md hover-lift shine-effect animate-fade-in"
+              style={{ animationDelay: `${index * 0.2}s` }}
             >
               <div className="h-48 bg-muted overflow-hidden">
-                <div className="w-full h-full bg-gradient-to-br from-primary/30 to-primary/10 flex items-center justify-center">
-                  <p className="font-heading font-bold text-2xl text-foreground/70">{project.title}</p>
+                <div className="w-full h-full bg-gradient-to-br from-primary/50 to-blue-500/30 flex items-center justify-center">
+                  <p className="font-heading font-bold text-2xl text-foreground/70 animation-float">{project.title}</p>
                 </div>
               </div>
               
               <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
+                <h3 className="text-xl font-semibold mb-2 gradient-text">{project.title}</h3>
                 <p className="text-muted-foreground mb-4">{project.description}</p>
                 
                 <div className="flex flex-wrap gap-2 mb-4">
-                  {project.tech.map((tech) => (
-                    <Badge key={tech} variant="outline" className="text-xs">
+                  {project.tech.map((tech, techIndex) => (
+                    <Badge 
+                      key={tech} 
+                      variant="outline" 
+                      className="text-xs animation-pulse"
+                      style={{ animationDelay: `${techIndex * 0.1}s` }}
+                    >
                       {tech}
                     </Badge>
                   ))}
@@ -63,9 +70,9 @@ export default function ProjectsSection() {
                     Team: {project.teamSize === 1 ? 'Solo Project' : `${project.teamSize} members`}
                   </p>
                   
-                  <Button variant="ghost" size="sm" className="text-primary">
+                  <Button variant="ghost" size="sm" className="text-primary animated-border">
                     <span>Details</span>
-                    <ExternalLink className="ml-1 h-4 w-4" />
+                    <ExternalLink className="ml-1 h-4 w-4 animation-float-horizontal" />
                   </Button>
                 </div>
               </div>

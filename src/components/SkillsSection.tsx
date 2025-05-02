@@ -46,25 +46,32 @@ export default function SkillsSection() {
   return (
     <section id="skills">
       <div className="section-container">
-        <h2 className="section-title">Skills</h2>
+        <h2 className="section-title">
+          <span className="gradient-text">Skills</span>
+        </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {skills.map((skill, index) => (
             <div 
               key={skill.category}
-              className="bg-card rounded-lg p-6 shadow-md transition-all hover:shadow-lg card-hover animate-fade-in"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className="bg-card rounded-lg p-6 shadow-md transition-all hover:shadow-lg gradient-card hover-lift animate-fade-in"
+              style={{ animationDelay: `${index * 0.15}s` }}
             >
               <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-primary/10 rounded-md text-primary">
+                <div className="p-2 bg-primary/10 rounded-md text-primary gradient-primary">
                   {skill.icon}
                 </div>
                 <h3 className="text-xl font-semibold">{skill.category}</h3>
               </div>
               
               <div className="flex flex-wrap gap-2 mt-4">
-                {skill.items.map((item) => (
-                  <Badge key={item} variant="secondary" className="text-sm py-1.5">
+                {skill.items.map((item, itemIndex) => (
+                  <Badge 
+                    key={item} 
+                    variant="secondary" 
+                    className="text-sm py-1.5 animation-pulse"
+                    style={{ animationDelay: `${itemIndex * 0.1}s` }}
+                  >
                     {item}
                   </Badge>
                 ))}
