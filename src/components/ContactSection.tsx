@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { GitHub, Linkedin, Mail, MapPin, Phone } from "lucide-react";
+import { Github, Linkedin, Mail, MapPin, Phone } from "lucide-react";
 
 export default function ContactSection() {
   return (
@@ -57,9 +57,9 @@ export default function ContactSection() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 bg-card rounded-full hover:bg-primary hover:text-primary-foreground transition-colors"
-                  aria-label="GitHub"
+                  aria-label="Github"
                 >
-                  <GitHub className="h-5 w-5" />
+                  <Github className="h-5 w-5" />
                 </a>
                 <a
                   href="mailto:akshit.dhake@mitaoe.ac.in"

@@ -1,5 +1,5 @@
 
-import { GitHub, Linkedin, Mail } from "lucide-react";
+import { Github, Linkedin, Mail } from "lucide-react";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -23,9 +23,9 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-primary transition-colors"
-              aria-label="GitHub"
+              aria-label="Github"
             >
-              <GitHub className="h-5 w-5" />
+              <Github className="h-5 w-5" />
             </a>
             <a
               href="mailto:akshit.dhake@mitaoe.ac.in"

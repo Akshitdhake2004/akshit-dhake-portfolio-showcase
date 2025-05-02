@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { GitHub, Linkedin, Mail, ArrowRight } from "lucide-react";
+import { Github, Linkedin, Mail, ArrowRight } from "lucide-react";
 
 export default function HeroSection() {
   return (
@@ -40,9 +40,9 @@ export default function HeroSection() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-primary transition-colors"
-                aria-label="GitHub"
+                aria-label="Github"
               >
-                <GitHub className="h-6 w-6" />
+                <Github className="h-6 w-6" />
               </a>
               <a
                 href="mailto:akshit.dhake@mitaoe.ac.in"
