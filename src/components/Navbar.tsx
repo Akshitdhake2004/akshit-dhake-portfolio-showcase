@@ -28,14 +28,20 @@ export default function Navbar() {
       
       // Determine active section based on scroll position
       const sections = navItems.map(item => item.href.substring(1));
-      const currentSection = sections.findLast(section => {
+      
+      // Find the last section that is currently in view (replacing findLast)
+      let currentSection = "home";
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const section = sections[i];
         const element = document.getElementById(section);
         if (element) {
           const rect = element.getBoundingClientRect();
-          return rect.top <= 100;
+          if (rect.top <= 100) {
+            currentSection = section;
+            break;
+          }
         }
-        return false;
-      }) || "home";
+      }
       
       if (currentSection !== activeSection) {
         setActiveSection(currentSection);
