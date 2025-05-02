@@ -9,11 +9,13 @@ import CertificationsSection from "@/components/CertificationsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
+import CustomCursor from "@/components/CustomCursor";
 
 const Index = () => {
   return (
     <ThemeProvider defaultTheme="system" storageKey="akshit-theme">
-      <div className="min-h-screen">
+      <div className="min-h-screen overflow-hidden">
+        <CustomCursor />
         <Navbar />
         <HeroSection />
         <AboutSection />
